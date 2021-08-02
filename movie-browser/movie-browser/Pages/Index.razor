@@ -5,9 +5,9 @@
 
 <h2 class="display-1" style="text-align: center; font-size: 60px">Movie Browser</h2>
 <div class="input-group">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+    <input type="search" @bind-value="@searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search"
            aria-describedby="search-addon" />
-    <button type="button" class="btn btn-outline-primary">search</button>
+    <button @onclick="@Search" type="button" class="btn btn-outline-primary" >search</button>
 </div>
 @if (string.IsNullOrWhiteSpace(errorString) == false)
 {
@@ -22,13 +22,13 @@ else
 <div class="row mt-5 justify-content-center">
     @foreach (var m in movies)
     {
-        <div class="card" style="width: 18rem; margin: 10px">
-            <img src="@($"https://image.tmdb.org/t/p/w500{m.Poster_path}")" class="card-img-top" alt="Image not found">
+        <div class="card" style="width: 18rem; margin: 10px; border: 1px solid black">
+            <img style="border-bottom: 2px solid black" src="@($"https://image.tmdb.org/t/p/w500{m.Poster_path}")" class="card-img-top" alt="Image not found">
             <div class="card-body">
                 <h5 class="card-title" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">@m.Title</h5>
-                <p class="card-text" style="font-weight: bold">@m.Vote_average</p>
+                <p class="card-text" style="font-weight: bold; font-size: 1.5em; color: darkorange">@m.Vote_average</p>
                 <p class="card-text">@m.Release_date.Substring(0, 4) </p>
-                <a href="#" class="btn btn-primary">View Details</a>
+                <a href="#" class="btn btn-outline-primary">View Details</a>
             </div>
         </div>
     }
@@ -36,13 +36,20 @@ else
 }
 
 @code {
-    List<MovieModel> movies;
-    string errorString;
+    private List<MovieModel> movies;
+    private string errorString;
+    private string searchTerm;
 
     protected override async Task OnInitializedAsync()
     {
+        var result = await _API.GetPopularMovies();
+        movies = result.Item1;
+        errorString = result.Item2;
+    }
 
-        var result = await _API.GetTopratedMovies();
+    private async Task Search()
+    {
+        var result = await _API.SearchMovies(searchTerm);
         movies = result.Item1;
         errorString = result.Item2;
     }

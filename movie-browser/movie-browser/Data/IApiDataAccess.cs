@@ -8,7 +8,7 @@ namespace movie_browser.Data
     public interface IApiDataAccess
     {
         Task<Tuple<MovieModel, string>> GetLatestMovie();
-        Task<Tuple<List<MovieModel>, string>> GetTopratedMovies();
-        Task<Tuple<MovieModel, string>> GetPopularMovies(int pageNum);
+        Task<Tuple<List<MovieModel>, string>> GetTopratedMovies(int pageNum);
+        Task<Tuple<List<MovieModel>, string>> GetPopularMovies(int pageNum);
     }
 }
