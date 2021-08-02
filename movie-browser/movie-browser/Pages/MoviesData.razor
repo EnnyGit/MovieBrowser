@@ -9,7 +9,7 @@
 {
     <div class="h2">@errorString</div>
 }
-else if (movie is null)
+else if (movies is null)
 {
     <div class="h4">Loading...</div>
 }
@@ -23,23 +23,27 @@ else
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>@movie.Title</td>
-                <td>@movie.Vote_average</td>
-            </tr>
+            @foreach (var m in movies)
+            {
+                <tr>
+                    <td>@m.Title</td>
+                    <td>@m.Vote_average</td>
+                </tr>
+            }
+
         </tbody>
     </table>
 }
 
 @code {      
-    MovieModel movie;
+    List<MovieModel> movies;
     string errorString;
 
     protected override async Task OnInitializedAsync()
     {
 
-        var result = await _API.GetMovie();
-        movie = result.Item1;
+        var result = await _API.GetTopratedMovies();
+        movies = result.Item1;
         errorString = result.Item2;
     }
 }
