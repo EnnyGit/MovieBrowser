@@ -30,6 +30,11 @@ namespace movie_browser
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddHttpClient();
+            services.AddHttpClient("meta", c => 
+            {
+                c.BaseAddress = new Uri(Configuration.GetValue<string>("MetaAPI"));
+            });
+            services.AddTransient<ApiDataAccess>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

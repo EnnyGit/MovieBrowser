@@ -1,6 +1,7 @@
 ﻿@page "/movies"
 
 @inject IHttpClientFactory _clientFactory
+@inject ApiDataAccess _API
 
 <h3>MoviesData</h3>
 
@@ -34,37 +35,11 @@ else
     MovieModel movie;
     string errorString;
 
-    // Runs after the injection, but before the page is rendered
     protected override async Task OnInitializedAsync()
     {
-        //var request = new HttpRequestMessage(HttpMethod.Get,
-        //    "https://api.themoviedb.org/3/movie/latest?api_key=8e0c2dde51210286d3e656c9b7bc0181");
 
-        //var client = _clientFactory.CreateClient();
-
-        //HttpResponseMessage response = await client.SendAsync(request);
-
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    movie = await response.Content.ReadFromJsonAsync<MovieModel>();
-        //    errorString = null;
-        //}
-        //else
-        //{
-        //    errorString = $"There was an error getting the movie: { response.ReasonPhrase }";
-        //}
-
-        var client = _clientFactory.CreateClient();
-
-        try
-        {
-            movie = await client.GetFromJsonAsync<MovieModel>("https://api.themoviedb.org/3/movie/latest?api_key=8e0c2dde51210286d3e656c9b7bc0181");
-            errorString = null;
-        }
-        catch (Exception e)
-        {
-
-            errorString = $"There was an error getting the movie: { e.Message }";
-        }
+        var result = await _API.GetMovie();
+        movie = result.Item1;
+        errorString = result.Item2;
     }
 }
