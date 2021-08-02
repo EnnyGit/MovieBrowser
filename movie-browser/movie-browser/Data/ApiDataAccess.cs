@@ -63,14 +63,14 @@ namespace movie_browser.Data
             return null;
         }
 
-        public async Task<Tuple<MovieModel, string>> GetPopularMovies()
+        public async Task<Tuple<MovieModel, string>> GetPopularMovies(int pageNum = 1)
         {
             string errorString;
             MovieModel movie = null;
 
             try
             {
-                movie = await _client.GetFromJsonAsync<MovieModel>($"popular?api_key={APIKey}");
+                movie = await _client.GetFromJsonAsync<MovieModel>($"popular?api_key={APIKey}&page={pageNum}");
                 errorString = null;
                 return Tuple.Create(movie, errorString);
             }

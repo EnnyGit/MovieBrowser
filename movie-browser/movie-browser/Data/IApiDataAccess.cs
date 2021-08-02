@@ -9,6 +9,6 @@ namespace movie_browser.Data
     {
         Task<Tuple<MovieModel, string>> GetLatestMovie();
         Task<Tuple<List<MovieModel>, string>> GetTopratedMovies();
-        Task<Tuple<MovieModel, string>> GetPopularMovies();
+        Task<Tuple<MovieModel, string>> GetPopularMovies(int pageNum);
     }
 }
