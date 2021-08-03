@@ -93,8 +93,7 @@ namespace movie_browser.Data
 
             try
             {
-                HttpResponseMessage response = await _client.GetAsync($"movie?api_key={APIKey}&query={param}");
-                //HttpResponseMessage response = await _client.GetAsync($"https://api.themoviedb.org/3/search/movie?api_key=8e0c2dde51210286d3e656c9b7bc0181&query={param}");
+                HttpResponseMessage response = await _client.GetAsync($"https://api.themoviedb.org/3/search/movie?api_key={APIKey}&query={param}");
                 if (response != null)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();

@@ -2,13 +2,13 @@
 
 @inject IHttpClientFactory _clientFactory
 @inject ApiDataAccess _API
-@inject NavigationManager  NavManager 
+@inject NavigationManager  NavManager
 
 <h2 class="display-1" style="text-align: center; font-size: 60px">Movie Browser</h2>
 <div class="input-group">
     <input type="search" @bind-value="@searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search"
            aria-describedby="search-addon" />
-    <button @onclick="@Search" type="button" class="btn btn-outline-primary" >search</button>
+    <button @onclick="@Search" type="button" class="btn btn-outline-primary">search</button>
 </div>
 @if (string.IsNullOrWhiteSpace(errorString) == false)
 {
@@ -20,20 +20,20 @@ else if (movies is null)
 }
 else
 {
-<div class="row mt-5 justify-content-center">
-    @foreach (var m in movies)
-    {
-        <div class="card" style="width: 18rem; margin: 10px; border: 1px solid black">
-            <img style="border-bottom: 2px solid black" src="@($"https://image.tmdb.org/t/p/w500{m.Poster_path}")" class="card-img-top" alt="Image not found">
-            <div class="card-body">
-                <h5 class="card-title" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">@m.Title</h5>
-                <p class="card-text" style="font-weight: bold; font-size: 1.5em; color: darkorange">@m.Vote_average</p>
-                <p class="card-text">@m.Release_date.Substring(0, 4) </p>
-                <a @onclick="() => NavigateToMovie(m.Id)" class="btn btn-outline-primary">View Details</a>
+    <div class="row mt-5 justify-content-center">
+        @foreach (var m in movies)
+        {
+            <div class="card" style="width: 18rem; margin: 10px; border: 1px solid black">
+                <img style="border-bottom: 2px solid black" src="@($"https://image.tmdb.org/t/p/w500{m.Poster_path}")" class="card-img-top" alt="Image not found">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">@m.Title</h5>
+                    <p class="card-text" style="font-weight: bold; font-size: 1.5em; color: darkorange">@m.Vote_average</p>
+                    <p class="card-text">@PrintReleaseYear(m.Release_date)</p>
+                    <a @onclick="() => NavigateToMovie(m.Id)" class="btn btn-outline-primary">View Details</a>
+                </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 }
 
 @code {
@@ -58,5 +58,17 @@ else
     private void NavigateToMovie(int id)
     {
         NavManager.NavigateTo($"/movie/{id}");
+    }
+
+    private string PrintReleaseYear(string date)
+    {
+        if (string.IsNullOrWhiteSpace(date) == false)
+        {
+            return date.Substring(0, 4);
+        }
+        else
+        {
+            return "No release date";
+        }
     }
 }
