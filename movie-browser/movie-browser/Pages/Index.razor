@@ -10,6 +10,7 @@
            aria-describedby="search-addon" />
     <button @onclick="@Search" type="button" class="btn btn-outline-primary">search</button>
 </div>
+
 @if (string.IsNullOrWhiteSpace(errorString) == false)
 {
     <div class="h2">@errorString</div>
