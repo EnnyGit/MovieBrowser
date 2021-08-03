@@ -1,0 +1,62 @@
+﻿@page "/movie/{Id:int}"
+
+@inject IHttpClientFactory _clientFactory
+@inject ApiDataAccess _API
+
+@if (movie is null)
+{
+    <div class="h4">Loading...</div>
+}
+else
+{
+
+    <img style="display: block; margin-left: auto; margin-right: auto; border: 2px solid black" src="@($"https://image.tmdb.org/t/p/w300{movie.Poster_path}")" />
+    <div style="margin-top: 20px; border: 2px solid black; border-radius: 0; border-bottom: 0px" class="card">
+        <div class="card-body">
+            <p style="text-align: center; font-size: 40px" class="display-1">@movie.Title</p>
+        </div>
+    </div>
+    <table style="border: 2px solid black" class="table table-dark">
+        <tbody>
+            <tr>
+                <th scope="row">Release date</th>
+                <td>@movie.Release_date</td>
+            </tr>
+            <tr>
+                <th scope="row">Runtime</th>
+                <td>@movie.Runtime</td>
+            </tr>
+            <tr>
+                <th scope="row">Status</th>
+                <td>@movie.Status</td>
+            </tr>
+            <tr>
+                <th scope="row">Genres</th>
+                <td>@movie.Genres[0].Name / @movie.Genres[1].Name</td>
+            </tr>
+            <tr>
+                <th scope="row">Score</th>
+                <td>@movie.Vote_average</td>
+            </tr>
+            <tr>
+                <th scope="row">Popularity</th>
+                <td>@movie.Popularity</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private MovieModel movie;
+    private string errorString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result2 = await _API.GetMovieById(Id);
+        movie = result2.Item1;
+        errorString = result2.Item2;
+    }
+}

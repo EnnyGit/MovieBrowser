@@ -93,9 +93,8 @@ namespace movie_browser.Data
 
             try
             {
-
-                //HttpResponseMessage response = await _client.GetAsync($"movie?api_key={APIKey}&query={param}");
-                HttpResponseMessage response = await _client.GetAsync($"https://api.themoviedb.org/3/search/movie?api_key=8e0c2dde51210286d3e656c9b7bc0181&query={param}");
+                HttpResponseMessage response = await _client.GetAsync($"movie?api_key={APIKey}&query={param}");
+                //HttpResponseMessage response = await _client.GetAsync($"https://api.themoviedb.org/3/search/movie?api_key=8e0c2dde51210286d3e656c9b7bc0181&query={param}");
                 if (response != null)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
@@ -109,6 +108,25 @@ namespace movie_browser.Data
                 return Tuple.Create(movies, errorString);
             }
             return null;
+        }
+
+        public async Task<Tuple<MovieModel, string>> GetMovieById(int id)
+        {
+            string errorString;
+            MovieModel movie = null;
+
+            try
+            {
+                movie = await _client.GetFromJsonAsync<MovieModel>($"{id}?api_key={APIKey}&language=en-US");
+                errorString = null;
+                return Tuple.Create(movie, errorString);
+            }
+            catch (Exception e)
+            {
+                errorString = $"There was an error getting the movie: { e.Message }";
+            }
+
+            return Tuple.Create(movie, errorString);
         }
     }
 }
